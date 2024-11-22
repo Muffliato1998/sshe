@@ -4,9 +4,9 @@
 
 ## 安装
 
-**开发环境：**go version go1.21.13 darwin/amd64
+**开发环境：** go version go1.21.13 darwin/amd64
 
-**IDE：**JetBrains Goland 2024.2.3
+**IDE：** JetBrains Goland 2024.2.3
 
 1. 克隆代码：
 ```bash
