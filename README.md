@@ -22,7 +22,7 @@ go mod tidy
 ```bash
 go build -ldflags="-s -w" -o sshe
 mv sshe /usr/local/bin/sshe
-chmod +x sshe
+chmod +x /usr/local/bin/sshe
 ```
 
 4. 测试执行
