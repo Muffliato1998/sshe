@@ -9,9 +9,8 @@ import (
 
 // Config 配置文件
 type Config struct {
-	Language       string `yaml:"language"`
-	PasswordEncode string `yaml:"password_encode"`
-	SecretKey      string `yaml:"secret_key"`
+	//PasswordEncode string `yaml:"password_encode"`
+	SecretKey string `yaml:"secret_key"`
 }
 
 // Node 节点
@@ -34,9 +33,8 @@ var (
 	configPath  = filepath.Join(os.Getenv("HOME"), ".sshe", "sshe.conf")
 	nodesPath   = filepath.Join(os.Getenv("HOME"), ".sshe", "node.yaml")
 	defaultConf = Config{
-		Language:       "zh-cn",
-		PasswordEncode: "aes",
-		SecretKey:      "sshe2024",
+		//PasswordEncode: "aes",
+		SecretKey: "sshe2024",
 	}
 	GlobalConfig = Config{}
 	GlobalNode   = NodesFile{}
@@ -110,13 +108,9 @@ func LoadConfig() error {
 			return err
 		}
 
-		// 如果某些配置项缺失，补充默认值
-		if GlobalConfig.Language == "" {
-			GlobalConfig.Language = defaultConf.Language
-		}
-		if GlobalConfig.PasswordEncode == "" {
-			GlobalConfig.PasswordEncode = defaultConf.PasswordEncode
-		}
+		//if GlobalConfig.PasswordEncode == "" {
+		//	GlobalConfig.PasswordEncode = defaultConf.PasswordEncode
+		//}
 		if GlobalConfig.SecretKey == "" {
 			GlobalConfig.SecretKey = defaultConf.SecretKey
 		}
