@@ -2,11 +2,14 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/creack/pty"
 	"github.com/spf13/cobra"
 	"golang.org/x/crypto/ssh"
 	"os"
+	"os/signal"
 	"sshe/config"
 	"sshe/utils"
+	"syscall"
 	"time"
 )
 
@@ -83,9 +86,10 @@ func sshConnect(node config.Node, password string) error {
 	}
 	defer func(session *ssh.Session) {
 		err := session.Close()
-		if err != nil {
+		if err != nil && err.Error() != "EOF" {
 			fmt.Printf("Failed to close SSH session: %v\n", err)
 		}
+		fmt.Print("\033c")
 	}(session)
 
 	// 设置会话的输入和输出，连接到本地终端
@@ -93,8 +97,15 @@ func sshConnect(node config.Node, password string) error {
 	session.Stderr = os.Stderr
 	session.Stdin = os.Stdin
 
+	// 获取当前终端的尺寸
+	rows, cols, err := pty.Getsize(os.Stdout)
+	fmt.Printf("width = %d height = %d", cols, rows)
+	if err != nil {
+		return fmt.Errorf("failed to get terminal size: %w", err)
+	}
+
 	// 请求伪终端（Pty）模拟交互式 shell 环境
-	if err := session.RequestPty("xterm", 80, 40, ssh.TerminalModes{
+	if err := session.RequestPty("vt100", rows, cols, ssh.TerminalModes{
 		ssh.ECHO:          1,
 		ssh.TTY_OP_ISPEED: 14400,
 		ssh.TTY_OP_OSPEED: 14400,
@@ -106,6 +117,15 @@ func sshConnect(node config.Node, password string) error {
 	if err := session.Shell(); err != nil {
 		return fmt.Errorf("failed to start shell: %w", err)
 	}
+
+	// 捕获 SIGINT 信号并忽略它
+	sigCh := make(chan os.Signal, 1)
+	signal.Notify(sigCh, syscall.SIGINT)
+
+	// 等待会话结束或 SIGINT 信号
+	go func() {
+		<-sigCh // 等待 SIGINT 信号
+	}()
 
 	// 等待会话结束
 	if err := session.Wait(); err != nil {
