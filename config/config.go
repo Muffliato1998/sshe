@@ -27,7 +27,7 @@ type NodesFile struct {
 }
 
 var (
-	Version     = "v2024.11.22"
+	Version     = "v2024.11.27"
 	configPath  = filepath.Join(os.Getenv("HOME"), ".sshe", "sshe.conf")
 	nodesPath   = filepath.Join(os.Getenv("HOME"), ".sshe", "node.yaml")
 	defaultConf = Config{
