@@ -107,10 +107,9 @@ func getUsername(existUsernames []string, ip string) (string, error) {
 
 // 处理标签输入
 func handleTagsInput(existingTags []string) ([]string, error) {
+	// 如果 tags 已经有了就不用再输入
 	if len(existingTags) > 0 {
-		fmt.Printf("\nTags can facilitate searching. Current tags: %v", existingTags)
-	} else {
-		fmt.Print("\nTags can facilitate searching. No tags added.")
+		return existingTags, nil
 	}
 	fmt.Print("\nAdd new tags (format: #tag1#tag2, or enter to skip): ")
 
@@ -136,7 +135,8 @@ func getPassword() ([]byte, error) {
 	if err != nil {
 		return nil, fmt.Errorf("error reading password: %w", err)
 	}
-	fmt.Println() // 换行以避免后续输出和密码提示混在一起
+	// 换行以避免后续输出和密码提示混在一起
+	fmt.Println()
 	return password, nil
 }
 
