@@ -9,7 +9,6 @@ import (
 
 // Config 配置文件
 type Config struct {
-	//PasswordEncode string `yaml:"password_encode"`
 	SecretKey string `yaml:"secret_key"`
 }
 
@@ -29,11 +28,9 @@ type NodesFile struct {
 
 var (
 	Version     = "v2024.11.22"
-	Commit      = ""
 	configPath  = filepath.Join(os.Getenv("HOME"), ".sshe", "sshe.conf")
 	nodesPath   = filepath.Join(os.Getenv("HOME"), ".sshe", "node.yaml")
 	defaultConf = Config{
-		//PasswordEncode: "aes",
 		SecretKey: "sshe2024",
 	}
 	GlobalConfig = Config{}
@@ -108,9 +105,6 @@ func LoadConfig() error {
 			return err
 		}
 
-		//if GlobalConfig.PasswordEncode == "" {
-		//	GlobalConfig.PasswordEncode = defaultConf.PasswordEncode
-		//}
 		if GlobalConfig.SecretKey == "" {
 			GlobalConfig.SecretKey = defaultConf.SecretKey
 		}
